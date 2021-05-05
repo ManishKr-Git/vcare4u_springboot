@@ -14,9 +14,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @Component
 public class FileUploader {
 //	Hello
-	public final String path = new ClassPathResource("\\static\\images\\").getFile().getAbsolutePath();
+	public final String path = new ClassPathResource("/static/images/").getFile().getAbsolutePath();
 	public FileUploader() throws IOException{
-		
+		System.out.println(path);
 	}
 	public ResponseEntity<String> uploadFile(MultipartFile file) {
 		try {
