@@ -13,7 +13,8 @@
   <artifactId>vCare4u</artifactId>  
   <version>0.0.1-SNAPSHOT</version>  
   <name>vCare4u</name>  
-  <description>Project</description>  
+  <description>Project</description>
+  <packaging>war</packaging>  
   <properties> 
     <java.version>1.8</java.version> 
   </properties>  
