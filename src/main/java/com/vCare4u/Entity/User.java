@@ -1,5 +1,8 @@
 package com.vCare4u.Entity;
 
+import java.math.BigInteger;
+import java.util.HashMap;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +12,7 @@ import javax.persistence.Id;
 public class User {
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private BigInteger id;
 	private String name;
 	private String email;
 	private String phone;
@@ -18,12 +21,13 @@ public class User {
 	private double rating;
 	private boolean isActivated;
 	private String activationCode;
+	public HashMap<BigInteger, Reviews>reviews;
 	
 	public User() {
 		super();
 	}
 
-	public User(long id, String name, String email, String phone, String aadhar, String password, double rating,
+	public User(BigInteger id, String name, String email, String phone, String aadhar, String password, double rating,
 			boolean isActivated, String activationCode) {
 		super();
 		this.id = id;
@@ -37,11 +41,11 @@ public class User {
 		this.activationCode = activationCode;
 	}
 
-	public long getId() {
+	public BigInteger getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(BigInteger id) {
 		this.id = id;
 	}
 

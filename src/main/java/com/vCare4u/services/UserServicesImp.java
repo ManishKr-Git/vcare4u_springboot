@@ -1,7 +1,9 @@
  package com.vCare4u.services;
 
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.vCare4u.Entity.LoginDetails;
+import com.vCare4u.Entity.Reviews;
 import com.vCare4u.Entity.User;
 import com.vCare4u.daoServices.UserDao;
 @Service
@@ -53,5 +56,7 @@ public class UserServicesImp implements UserServices {
 			}
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
+	}
+	public void addUserRating(BigInteger id,Reviews reviews){
 	}
 }
