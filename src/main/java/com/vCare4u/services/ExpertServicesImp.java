@@ -78,4 +78,8 @@ public class ExpertServicesImp implements ExpertServices {
 	public List<Reviews>getExpertRating(BigInteger id){
 		return reviewsServices.findBySupplierId(id);
 	}
+	public boolean alreadyExist(String email) {
+		Expert expert = expertServices.findByEmail(email);
+		return expert!=null;
+	}
 }

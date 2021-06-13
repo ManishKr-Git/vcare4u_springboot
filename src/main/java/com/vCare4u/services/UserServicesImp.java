@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.vCare4u.Entity.Expert;
 import com.vCare4u.Entity.LoginDetails;
 import com.vCare4u.Entity.Reviews;
 import com.vCare4u.Entity.User;
@@ -58,5 +59,10 @@ public class UserServicesImp implements UserServices {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
 	}
 	public void addUserRating(BigInteger id,Reviews reviews){
+	}
+	public boolean alreadyExist(String email) {
+		User user = services.findByEmail(email);
+		System.out.println(user);
+		return user!=null;
 	}
 }

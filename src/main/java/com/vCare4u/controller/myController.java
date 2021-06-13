@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vCare4u.Entity.ApiResponse;
 import com.vCare4u.Entity.Expert;
 import com.vCare4u.Entity.LoginDetails;
 import com.vCare4u.Entity.Reviews;
@@ -39,9 +40,14 @@ public class myController {
 		return userServices.getUsers();
 	}
 	@PostMapping("/users")
-	public User addUser(@RequestBody User user) {
+	public ApiResponse addUser(@RequestBody User user) {
+		System.out.println("Here");
+		if(userServices.alreadyExist(user.getEmail()))
+		{
+			return new ApiResponse<User>(null, false, "User Already Exist!!!");
+		}
 		userServices.addUser(user);
-		return user;
+		return new ApiResponse<User>(null, true, "Registration Successfull!!!");
 	}
 	@PostMapping("login/user-login")
 	public ResponseEntity<User> userLogin(@RequestBody LoginDetails user){
@@ -59,12 +65,17 @@ public class myController {
 //////////////////////////////////////////////////////////////////////////////////////////	
 //Experts'Functions
 	@PostMapping("/experts")
-	public void addExpert(@RequestParam("image") MultipartFile file,@RequestParam("expert") String expertString) throws IOException {
+	public ApiResponse<Expert> addExpert(@RequestParam("image") MultipartFile file,@RequestParam("expert") String expertString) throws IOException {
 		ObjectMapper obj = new ObjectMapper();
 		Expert expert = obj.readValue(expertString, Expert.class);
+		if(expertServices.alreadyExist(expert.getEmail()))
+		{
+			return new ApiResponse<Expert>(null, false, "User Already Exist!!!");
+		}
 		expert.setPriceWithoutDiscount(Math.floor((Math.random()*500)+500));
 		expert.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
 		expertServices.addExpert(expert);
+		return new ApiResponse<Expert>(null, true, "Registeration Successfull!!");
 	}
 	@GetMapping("/experts")
 	public List<Expert>getExperts(){

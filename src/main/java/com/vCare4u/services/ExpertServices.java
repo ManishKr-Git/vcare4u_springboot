@@ -14,6 +14,7 @@ public interface ExpertServices {
 	public List<Expert>getExperts();
 	public Expert getExpert(BigInteger id);
 	public Expert addExpert(Expert expert);
+	public boolean alreadyExist(String email);
 	public ResponseEntity<Expert> expertLogin(LoginDetails expert);
 	public ResponseEntity<String>activateAccount(String activationCode);
 	public void addExpertRating(BigInteger id,Reviews reviews);
