@@ -13,7 +13,7 @@ public interface UserServices {
 	public List<User>getUsers();
 	public User addUser(User user);
 	public boolean alreadyExist(String email);
-	public ResponseEntity<User> userLogin(LoginDetails user);
+	public User userLogin(LoginDetails user);
 	public ResponseEntity<String>activateAccount(String activationCode);
 	public void addUserRating(BigInteger id,Reviews reviews);	
 	

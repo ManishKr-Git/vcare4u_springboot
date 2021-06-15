@@ -50,8 +50,8 @@ public class myController {
 		return new ApiResponse<User>(null, true, "Registration Successfull!!!");
 	}
 	@PostMapping("login/user-login")
-	public ResponseEntity<User> userLogin(@RequestBody LoginDetails user){
-		return userServices.userLogin(user);
+	public ApiResponse<User> userLogin(@RequestBody LoginDetails user){
+		return new ApiResponse<>(userServices.userLogin(user), true, "Registeration Successfull!!");
 	}
 	@GetMapping("/user-email-verification/activating-account/{activationCode}")
 	public ResponseEntity<String> activateUserAccount(@PathVariable String activationCode){
@@ -65,16 +65,17 @@ public class myController {
 //////////////////////////////////////////////////////////////////////////////////////////	
 //Experts'Functions
 	@PostMapping("/experts")
-	public ApiResponse<Expert> addExpert(@RequestParam("image") MultipartFile file,@RequestParam("expert") String expertString) throws IOException {
+	public ApiResponse<Expert> addExpert(@RequestParam("image") MultipartFile file,@RequestParam("expert") String expertString) throws Exception {
 		ObjectMapper obj = new ObjectMapper();
 		Expert expert = obj.readValue(expertString, Expert.class);
 		if(expertServices.alreadyExist(expert.getEmail()))
 		{
-			return new ApiResponse<Expert>(null, false, "User Already Exist!!!");
+			throw new RuntimeException("Expert with same email id already exist!!!");
 		}
-		expert.setPriceWithoutDiscount(Math.floor((Math.random()*500)+500));
+		expert.setPriceWithoutDiscount(Math.floor((Math.random()*expert.getFees()/2)+expert.getFees()));
 		expert.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
 		expertServices.addExpert(expert);
+		System.out.println(expert.getEmail());
 		return new ApiResponse<Expert>(null, true, "Registeration Successfull!!");
 	}
 	@GetMapping("/experts")
@@ -86,8 +87,8 @@ public class myController {
 		return expertServices.getExpert((BigInteger) id);
 	}
 	@PostMapping("login/expert-login")
-	public ResponseEntity<Expert> expertLogin(@RequestBody LoginDetails expert){
-		return expertServices.expertLogin(expert);
+	public ApiResponse<Expert> expertLogin(@RequestBody LoginDetails expert){
+		return new ApiResponse<>(expertServices.expertLogin(expert), true, "Registeration Successfull!!");
 	}
 	@GetMapping("/expert-email-verification/activating-account/{activationCode}")
 	public ResponseEntity<String> activateExpertAccount(@PathVariable String activationCode){

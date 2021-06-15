@@ -11,7 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.MapKeyColumn;
 
+import lombok.Data;
+
 @Entity
+@Data
 public class Expert {
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.AUTO)

@@ -28,22 +28,15 @@ public class UserServicesImp implements UserServices {
 	public User addUser(User user){
 		return services.save(user);
 	}
-	public ResponseEntity<User> userLogin(LoginDetails user) {
-		String email  = user.getEmail();
-		String pass = user.getPassword();
-		List<User>registered_user = getUsers();
-		Iterator<User>it = registered_user.iterator();
-		while(it.hasNext()) {
-			User u = it.next();
-			if(u.getEmail().equalsIgnoreCase(email) && u.getPassword().equals(pass)) {
-				if(u.isActivated()) {
-					return ResponseEntity.of(Optional.of(u));
-				}else {
-					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-				}
-			}
+	public User userLogin(LoginDetails user) {
+		User registered_user = services.findByEmailAndPassword(user.getEmail(),user.getPassword());
+		if(registered_user!=null &&registered_user.isActivated()) {
+			return registered_user;
+		}else if(registered_user==null){
+			throw new RuntimeException("Invalid User Credentials!!!");
+		}else {
+			throw new RuntimeException("User is not activated!!!!!!");
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 	public ResponseEntity<String>activateAccount(String activationCode){
 		List<User>list = services.findAll();

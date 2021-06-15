@@ -21,6 +21,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiErrorResponse> runtimeException(RuntimeException ex, WebRequest request)
     {
+    	System.out.println("Manish\n\n\n\n");
         ApiErrorResponse errorDetails = new ApiErrorResponse(Instant.now(), ex.getMessage(), ex.getLocalizedMessage(),
                 HttpStatus.BAD_REQUEST, request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);

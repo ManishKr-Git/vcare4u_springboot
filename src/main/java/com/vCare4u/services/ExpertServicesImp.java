@@ -32,16 +32,18 @@ public class ExpertServicesImp implements ExpertServices {
 		return expertServices.findById(id).orElse(null);
 	}
 	public Expert addExpert(Expert expert){
+		System.out.println("Adding");
 		return expertServices.save(expert);
 	}
-	public ResponseEntity<Expert> expertLogin(LoginDetails expert) {
+	public Expert expertLogin(LoginDetails expert) {
 		Expert registered_expert = expertServices.findByEmailAndPassword(expert.getEmail(),expert.getPassword());
 		if(registered_expert!=null &&registered_expert.isActivated()) {
-			return ResponseEntity.of(Optional.of(registered_expert));
+			return registered_expert;
+		}else if(registered_expert==null){
+			throw new RuntimeException("Invalid Expert Credentials!!!");
 		}else {
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-		}
-		
+			throw new RuntimeException("Expert is not activated!!!!!!");
+		}		
 	}
 	public ResponseEntity<String>activateAccount(String activationCode){
 		List<Expert>list = expertServices.findAll();
@@ -80,6 +82,7 @@ public class ExpertServicesImp implements ExpertServices {
 	}
 	public boolean alreadyExist(String email) {
 		Expert expert = expertServices.findByEmail(email);
+		System.out.println(expert);
 		return expert!=null;
 	}
 }
