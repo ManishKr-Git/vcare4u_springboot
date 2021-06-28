@@ -12,9 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.vCare4u.Entity.Bookings;
 import com.vCare4u.Entity.Expert;
 import com.vCare4u.Entity.LoginDetails;
 import com.vCare4u.Entity.Reviews;
+import com.vCare4u.daoServices.BookingDao;
 import com.vCare4u.daoServices.ExpertDao;
 import com.vCare4u.daoServices.ReviewsDao;
 @Service
@@ -23,6 +25,8 @@ public class ExpertServicesImp implements ExpertServices {
 	private ExpertDao expertServices;
 	@Autowired
 	private ReviewsDao reviewsServices;
+	@Autowired
+	private BookingDao bookings;
 	public ExpertServicesImp(){
 	}
 	public List<Expert>getExperts(){
@@ -58,24 +62,26 @@ public class ExpertServicesImp implements ExpertServices {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
 	}
-	public void addExpertRating(BigInteger id,Reviews reviews){		
-		Reviews old = reviewsServices.findByCustomerIdAndSupplierId(reviews.getCustomer_id(),id);
+	public void addExpertRating(BigInteger id,Reviews reviews){
+		System.out.println(reviews);
+		Reviews old = reviewsServices.findByCustomerIdAndSupplierId(reviews.getCustomerId(),id);
+		System.out.println(old);
 		if(old==null) {
-			reviews.setSupplier_id(id);
+			reviews.setSupplierId(id);
 			reviewsServices.save(reviews);
-			List<Reviews> total_reviews = reviewsServices.findBySupplierId(id);
-			float total_rating = 0;
-			for(Reviews r:total_reviews) {
-				total_rating+=r.getStars();
-			}
-			Expert e = expertServices.getOne(id);
-			e.setRating(total_rating/total_reviews.size());
-			expertServices.save(e);
 		}else {
 			old.setStars(reviews.getStars());
 			old.setReview(reviews.getReview());
 			reviewsServices.save(old);
 		}
+		List<Reviews> total_reviews = reviewsServices.findBySupplierId(id);
+		float total_rating = 0;
+		for(Reviews r:total_reviews) {
+			total_rating+=r.getStars();
+		}
+		Expert e = expertServices.getOne(id);
+		e.setRating(total_rating/total_reviews.size());
+		expertServices.save(e);
 	}
 	public List<Reviews>getExpertRating(BigInteger id){
 		return reviewsServices.findBySupplierId(id);
@@ -84,5 +90,8 @@ public class ExpertServicesImp implements ExpertServices {
 		Expert expert = expertServices.findByEmail(email);
 		System.out.println(expert);
 		return expert!=null;
+	}
+	public List<Bookings> getAllExpertBookings(BigInteger expertId){
+		return bookings.findByExpertId(expertId);
 	}
 }

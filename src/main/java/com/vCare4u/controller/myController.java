@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vCare4u.Entity.ApiResponse;
+import com.vCare4u.Entity.Bookings;
 import com.vCare4u.Entity.Expert;
 import com.vCare4u.Entity.LoginDetails;
 import com.vCare4u.Entity.Reviews;
 import com.vCare4u.Entity.User;
 import com.vCare4u.services.ExpertServices;
 import com.vCare4u.services.UserServices;
-@CrossOrigin("https://vcare4u-uoh.herokuapp.com")
-//@CrossOrigin("http://localhost:3000")
+//@CrossOrigin("https://vcare4u-uoh.herokuapp.com")
+@CrossOrigin("http://localhost:3000")
 @RestController
 public class myController {
 	@Autowired
@@ -61,7 +62,14 @@ public class myController {
 	public void addUserRating(@PathVariable BigInteger id,@RequestBody Reviews reviews){
 		userServices.addUserRating(id,reviews);
 	}
-	
+	@GetMapping("/user-bookings/{userId}")
+	public ApiResponse<List<Bookings>> getAllUserBookings(@PathVariable BigInteger userId){
+		return new ApiResponse<List<Bookings>>(userServices.getAllUserBookings(userId), true, "All bookings");		
+	}
+	@PostMapping("/add-bookings/")
+	public ApiResponse<Bookings> addUserBookings(@RequestBody Bookings bookings){
+		return new ApiResponse<Bookings>(userServices.addUserBookings(bookings), true, "Booking Has Been Added");		
+	}
 //////////////////////////////////////////////////////////////////////////////////////////	
 //Experts'Functions
 	@PostMapping("/experts")
@@ -101,5 +109,14 @@ public class myController {
 	@GetMapping("expert-ratings/{id}")
 	public List<Reviews> getExpertRating(@PathVariable BigInteger id){		
 		return expertServices.getExpertRating(id);
+	}
+	@GetMapping("/expert-bookings/{expertId}")
+	public ApiResponse<List<Bookings>> getAllExpertBookings(@PathVariable BigInteger expertId){
+		return new ApiResponse<List<Bookings>>(expertServices.getAllExpertBookings(expertId), true, "All bookings");		
+	}
+	//Common Functions
+	@PostMapping("/createOrder/")
+	public String createOrder(@RequestBody Bookings orderData){
+		return userServices.createOrder(orderData);	
 	}
 }

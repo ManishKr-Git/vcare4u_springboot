@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
+import com.vCare4u.Entity.Bookings;
 import com.vCare4u.Entity.Expert;
 import com.vCare4u.Entity.LoginDetails;
 import com.vCare4u.Entity.Reviews;
@@ -19,4 +20,5 @@ public interface ExpertServices {
 	public ResponseEntity<String>activateAccount(String activationCode);
 	public void addExpertRating(BigInteger id,Reviews reviews);
 	public List<Reviews>getExpertRating(BigInteger id);
+	public List<Bookings> getAllExpertBookings(BigInteger expertId);
 }
