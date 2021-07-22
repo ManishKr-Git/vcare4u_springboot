@@ -106,6 +106,7 @@ public class UserServicesImp implements UserServices {
 			System.out.println(result.get("id"));
 			String orderId = result.get("id");
 			booking.setOrderNo(orderId);
+			booking.setBookedOn(new Date(System.currentTimeMillis()));
 			bookingServices.save(booking);
 			return order.toString();			
 		} catch (RazorpayException e) {
