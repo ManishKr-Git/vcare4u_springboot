@@ -25,8 +25,8 @@ import com.vCare4u.Entity.Reviews;
 import com.vCare4u.Entity.User;
 import com.vCare4u.services.ExpertServices;
 import com.vCare4u.services.UserServices;
-//@CrossOrigin("https://vcare4u-uoh.herokuapp.com")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://vcare4u-uoh.herokuapp.com")
+//@CrossOrigin("http://localhost:3000")
 @RestController
 public class myController {
 	@Autowired
