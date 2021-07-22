@@ -94,4 +94,7 @@ public class ExpertServicesImp implements ExpertServices {
 	public List<Bookings> getAllExpertBookings(BigInteger expertId){
 		return bookings.findByExpertId(expertId);
 	}
+	public List<Expert>getSelectedCategoryExperts(String category){
+		return expertServices.findByExpertization(category);
+	}
 }

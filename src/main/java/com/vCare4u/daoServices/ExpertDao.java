@@ -10,6 +10,7 @@ import com.vCare4u.Entity.Expert;
 
 public interface ExpertDao extends JpaRepository<Expert, BigInteger>{
 	public List<Expert>findAllByIsActivatedTrue();
+	public List<Expert>findByExpertization(String category);
 	public Expert findByEmailAndPassword(String email, String password);
-	public Expert findByEmail(String email);
+	public Expert findByEmail(String email);	
 }

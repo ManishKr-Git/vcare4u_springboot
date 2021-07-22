@@ -13,7 +13,8 @@ import com.vCare4u.Entity.Reviews;
 
 public interface ExpertServices {
 	public List<Expert>getExperts();
-	public Expert getExpert(BigInteger id);
+	public List<Expert>getSelectedCategoryExperts(String category);
+	public Expert getExpert(BigInteger id);	
 	public Expert addExpert(Expert expert);
 	public boolean alreadyExist(String email);
 	public Expert expertLogin(LoginDetails expert);

@@ -25,8 +25,8 @@ import com.vCare4u.Entity.Reviews;
 import com.vCare4u.Entity.User;
 import com.vCare4u.services.ExpertServices;
 import com.vCare4u.services.UserServices;
-@CrossOrigin("https://vcare4u-uoh.herokuapp.com")
-//@CrossOrigin("http://localhost:3000")
+//@CrossOrigin("https://vcare4u-uoh.herokuapp.com")
+@CrossOrigin("http://localhost:3000")
 @RestController
 public class myController {
 	@Autowired
@@ -74,17 +74,24 @@ public class myController {
 //Experts'Functions
 	@PostMapping("/experts")
 	public ApiResponse<Expert> addExpert(@RequestParam("image") MultipartFile file,@RequestParam("expert") String expertString) throws Exception {
-		ObjectMapper obj = new ObjectMapper();
-		Expert expert = obj.readValue(expertString, Expert.class);
-		if(expertServices.alreadyExist(expert.getEmail()))
+		
+		try
 		{
-			throw new RuntimeException("Expert with same email id already exist!!!");
+			ObjectMapper obj = new ObjectMapper();
+			Expert expert = obj.readValue(expertString, Expert.class);
+			if(expertServices.alreadyExist(expert.getEmail()))
+			{
+				throw new RuntimeException("Expert with same email id already exist!!!");
+			}
+			expert.setPriceWithoutDiscount(Math.floor((Math.random()*expert.getFees()/2)+expert.getFees()));
+			expert.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+			expertServices.addExpert(expert);
+			System.out.println(expert.getEmail());
+			return new ApiResponse<Expert>(null, true, "Registeration Successfull!!");
+		}catch(Exception e) {
+			throw new RuntimeException("Some Error Occured!!!Try again later");
 		}
-		expert.setPriceWithoutDiscount(Math.floor((Math.random()*expert.getFees()/2)+expert.getFees()));
-		expert.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
-		expertServices.addExpert(expert);
-		System.out.println(expert.getEmail());
-		return new ApiResponse<Expert>(null, true, "Registeration Successfull!!");
+		
 	}
 	@GetMapping("/experts")
 	public List<Expert>getExperts(){
@@ -113,6 +120,10 @@ public class myController {
 	@GetMapping("/expert-bookings/{expertId}")
 	public ApiResponse<List<Bookings>> getAllExpertBookings(@PathVariable BigInteger expertId){
 		return new ApiResponse<List<Bookings>>(expertServices.getAllExpertBookings(expertId), true, "All bookings");		
+	}
+	@GetMapping("/selectedCategoryExperts/{category}")
+	public ApiResponse<List<Expert>> getSelectedCategoryExperts(@PathVariable String category){
+		return new ApiResponse<List<Expert>>(expertServices.getSelectedCategoryExperts(category), true, "All bookings");		
 	}
 	//Common Functions
 	@PostMapping("/createOrder/")
